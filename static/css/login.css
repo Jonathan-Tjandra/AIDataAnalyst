@@ -1,0 +1,234 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e0f7fa; /* Light blue background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.login-container {
+    background-color: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px; /* Max width for the login form */
+    text-align: center;
+}
+
+h2 {
+    color: #333;
+    margin-bottom: 30px;
+    font-size: 1.8em;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #555;
+    font-weight: bold;
+}
+
+.password-container { /* Flex container for password input and toggle */
+    position: relative; /* Essential for absolute positioning of toggle */
+    display: flex; /* Helps align input and creates positioning context */
+    align-items: center;
+}
+
+/* NEW: Unified input styling for consistent size */
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="text"] { /* Apply to all text and password inputs in forms */
+    width: 100%; /* Make it fill its container */
+    padding: 12px 10px; /* Default padding */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    box-sizing: border-box; /* Ensures padding is included in element's total width */
+    height: 42px; /* Explicit height to prevent reflow */
+    line-height: 1.5; /* Consistent line height for text rendering */
+}
+
+/* Specific padding for password input to accommodate the toggle */
+.password-container input { /* Target input specifically within the password-container */
+    padding-right: 40px; /* Increased right padding for the toggle */
+}
+
+
+.form-group input[type="email"]:focus,
+.form-group input[type="password"]:focus,
+.form-group input[type="text"]:focus { /* Apply focus style to both password and text types */
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+.password-toggle { /* Styling for the show/hide password icon */
+    position: absolute; /* Positioned relative to .password-container */
+    right: 10px; /* Adjusted position to fit within padding */
+    cursor: pointer;
+    color: #888;
+    font-size: 0.9em;
+    user-select: none; /* Prevent text selection */
+    z-index: 10; /* Ensure it's above the input field */
+}
+.password-toggle:hover {
+    color: #333;
+}
+
+
+button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff; /* Blue for submit button */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-top: 20px;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+.signup-button, .forgot-password-link {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #28a745; /* Green for signup button */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none; /* Remove underline for anchor tag */
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+.forgot-password-link {
+    background-color: #ffc107; /* Yellow for forgot password */
+    color: #333;
+    font-size: 0.9em;
+    padding: 8px 15px; /* Slightly smaller padding */
+    margin-top: 10px; /* Adjust margin */
+}
+
+.signup-button:hover {
+    background-color: #218838;
+}
+.forgot-password-link:hover {
+    background-color: #e0a800;
+}
+
+.back-button {
+    display: inline-block;
+    margin-top: 25px;
+    padding: 8px 15px;
+    background-color: #6c757d; /* Gray for back button */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 0.9em;
+    transition: background-color 0.2s ease;
+}
+
+.back-button:hover {
+    background-color: #5a6268;
+}
+
+/* Message Styling */
+.message {
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    display: none; /* Hidden by default */
+}
+
+.message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    display: block; /* Show if it has content */
+}
+
+.message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    display: block; /* Show if it has content */
+}
+
+/* Styling for the OR separator */
+.separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #aaa;
+    margin: 25px 0;
+}
+.separator::before,
+.separator::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #ddd;
+}
+.separator:not(:empty)::before {
+    margin-right: .25em;
+}
+.separator:not(:empty)::after {
+    margin-left: .25em;
+}
+
+/* Centering for the Google Button */
+.google-btn-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+#global-loading-overlay {
+    /* Hidden by default */
+    display: none; 
+    
+    /* Position it over everything */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.7); /* Light background with transparency */
+    z-index: 9999; /* High z-index to be on top */
+
+    /* Use flexbox to center the spinner */
+    justify-content: center;
+    align-items: center;
+}
+
+/* The spinning loader animation */
+.loader {
+    border: 6px solid #f3f3f3; /* Light grey */
+    border-top: 6px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
+/* The spin animation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

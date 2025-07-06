@@ -1,0 +1,93 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif; /* Using Inter font */
+    overflow: hidden; /* Prevent scrollbars if not needed */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center content vertically */
+    align-items: center; /* Center content horizontally */
+    /* Aesthetic Background: Subtle linear gradient */
+    background: linear-gradient(135deg, #f0f8ff, #e0f2f7); /* Light blue to very light blue gradient */
+    color: #333; /* Darker text for readability */
+}
+
+/* Login Button Styling (Modified to be within main-content) */
+#login-button {
+    /* Removed fixed positioning */
+    padding: 15px 35px; /* Slightly larger padding for a prominent button */
+    background-color: #007bff; /* Primary blue for main action */
+    color: white;
+    border: none;
+    border-radius: 8px; /* Nicely rounded corners */
+    cursor: pointer;
+    font-size: 1.2em; /* Larger font for main action */
+    font-weight: 600; /* Bolder text */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Enhanced shadow */
+    z-index: 1000;
+    transition: background-color 0.2s ease, transform 0.2s ease; /* Smooth transitions */
+    margin-top: 30px; /* Space from the text above */
+}
+
+#login-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+}
+
+/* Main content container for aesthetic appeal */
+.main-content {
+    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white card */
+    padding: 60px 40px; /* Generous padding */
+    border-radius: 12px; /* Nicely rounded corners */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); /* More prominent shadow */
+    text-align: center;
+    max-width: 600px; /* Constrain width for better readability */
+    width: 90%; /* Responsive width */
+    margin: 0 auto; /* Center block element */
+    animation: fadeInScale 0.8s ease-out; /* Animation on load */
+}
+
+.main-content h1 {
+    font-size: 3.5em; /* Larger, more impactful heading */
+    color: #007bff; /* Primary blue color for heading */
+    margin-bottom: 20px;
+    font-weight: 700; /* Bold */
+}
+
+.main-content p {
+    font-size: 1.2em; /* Readable paragraph font size */
+    line-height: 1.6;
+    color: #555; /* Soft gray text */
+    margin-bottom: 0; /* Removed bottom margin as button will follow */
+}
+
+/* Simple animation for the main content */
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .main-content {
+        padding: 40px 20px;
+        margin: 20px; /* Add margin on smaller screens */
+    }
+    .main-content h1 {
+        font-size: 2.5em;
+    }
+    .main-content p {
+        font-size: 1em;
+    }
+    #login-button {
+        padding: 12px 25px; /* Adjust button size for smaller screens */
+        font-size: 1em;
+    }
+}

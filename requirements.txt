@@ -1,0 +1,15 @@
+Flask
+Flask-Cors
+gunicorn
+requests
+werkzeug
+google-auth
+google-auth-oauthlib
+SQLAlchemy
+Flask-SQLAlchemy
+psycopg2-binary
+google-generativeai
+boto3
+pandas
+matplotlib
+python-dotenv

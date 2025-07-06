@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Email</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/verify_email.css') }}">
+</head>
+<body>
+    <div class="verify-container">
+        <h2>Verify Your Email</h2>
+        <p>A 6-digit confirmation code has been sent to <strong>{{ email }}</strong>. Please enter it below.</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="message {{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form action="/confirm_account" method="POST">
+            <div class="form-group">
+                <label for="code">Confirmation Code</label>
+                <input type="text" id="code" name="code" pattern="\d{6}" maxlength="6" required placeholder="e.g., 123456">
+                {# Hidden input to pass email back to the server #}
+                <input type="hidden" name="email" value="{{ email }}">
+                {# NEW: Hidden input to pass the purpose back to the server #}
+                <input type="hidden" name="purpose" value="{{ purpose }}">
+            </div>
+            <button type="submit">Verify Account</button>
+        </form>
+
+        <form action="/resend_confirmation_code" method="POST">
+            <input type="hidden" name="email" value="{{ email }}">
+            {# NEW: Hidden input to pass the purpose back to the server #}
+            <input type="hidden" name="purpose" value="{{ purpose }}">
+            <button type="submit" class="resend-button">Resend Code</button>
+        </form>
+
+        <a href="/signup" class="back-to-signup-button">Go back to Sign Up</a>
+    </div>
+</body>
+</html>

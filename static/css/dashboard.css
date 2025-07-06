@@ -1,0 +1,328 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f4f8;
+    margin: 0;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* --- Header and Profile Menu --- */
+.header {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 30px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+    flex-shrink: 0;
+    height: 70px;
+}
+.header h1 { margin: 0; font-size: 1.5em; color: #007bff; }
+
+/* --- Profile Menu Styles --- */
+.user-profile-container { justify-self: end; }
+.user-profile-button { width: 45px; height: 45px; border-radius: 50%; background-color: #007bff; color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1em; font-weight: bold; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15); }
+.user-dropdown { display: none; position: absolute; top: 55px; right: 0; background-color: white; min-width: 250px; box-shadow: 0 8px 16px rgba(0,0,0,0.2); border-radius: 8px; z-index: 1010; }
+.user-dropdown.show { display: block; }
+.user-info { padding: 15px 20px; border-bottom: 1px solid #eee; }
+.user-email { font-size: 14px; color: #666; word-break: break-all; margin: 0; }
+.user-name { font-size: 16px; font-weight: 600; color: #333; margin: 5px 0 0 0; }
+.dropdown-actions { padding: 5px 0; }
+.dropdown-action { width: 100%; padding: 12px 20px; border: none; background: none; text-align: left; cursor: pointer; font-size: 14px; color: #333; display: flex; align-items: center; gap: 10px; }
+.dropdown-action:hover { background-color: #f8f9fa; }
+.dropdown-action.logout, .dropdown-action.delete-account { color: #dc3545; }
+
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 5px;
+    color: white;
+    font-weight: 500;
+    z-index: 1000;
+    animation: slideIn 0.3s ease-out;
+}
+
+.notification.success {
+    background-color: #10b981;
+}
+
+.notification.error {
+    background-color: #ef4444;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* --- Main Content Area --- */
+    main {
+    width: 100%;
+    max-width: 900px;
+    padding: 15px 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
+    gap: 12px;
+    overflow: hidden;
+    height: calc(100vh - 70px); /* fill space below header */
+}
+
+.content-card {
+    background-color: white;
+    padding: 24px 32px; /* more space inside the card */
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    /* Removed max-height to allow flexible expansion */
+}
+
+.content-card h2 {
+    margin-top: 0;
+    margin-bottom: 12px; /* slightly more breathing room */
+    color: #0056b3;
+    border-bottom: 2px solid #e9ecef;
+    padding-bottom: 10px;
+    text-align: center;
+    font-size: 1.4em; /* larger heading */
+}
+
+.content-card p {
+    margin: 0;
+    font-size: 0.95em;
+    max-height: 50px;
+}
+
+.data-sources-card {
+    background-color: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow: hidden;
+    max-height: 650px;
+}
+
+.data-sources-card h2 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    color: #0056b3;
+    border-bottom: 2px solid #e9ecef;
+    padding-bottom: 8px;
+    text-align: center;
+    font-size: 1.2em;
+    flex-shrink: 0;
+    max-height: 50px;
+}
+
+.upload-form { 
+    text-align: center; 
+    margin-bottom: 25px; 
+}
+.upload-form p { 
+    margin: 0 0 15px 0; 
+    font-size: 1.1em; 
+    color: #495057; 
+}
+.file-input-wrapper { 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    gap: 15px; 
+    margin-bottom: 15px; 
+}
+.upload-form input[type="file"] {
+    display: none;
+}
+.custom-file-upload {
+    border: 1px solid #ced4da;
+    display: inline-block;
+    padding: 8px 15px;
+    cursor: pointer;
+    background-color: #e9ecef;
+    border-radius: 5px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+.custom-file-upload:hover {
+    background-color: #dee2e6;
+}
+.file-name {
+    font-style: italic;
+    color: #6c757d;
+}
+.upload-form button { 
+    background-color: #28a745; 
+    color: white; 
+    border: none; 
+    padding: 10px 20px; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    font-weight: bold; 
+}
+.upload-form button:hover { 
+    background-color: #218838; 
+}
+#upload-status { 
+    margin-top: 15px; 
+    font-weight: bold; 
+}
+
+.file-list-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    margin-top: 5px;
+}
+
+.file-list-header {
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #e9ecef;
+    flex-shrink: 0;
+}
+
+.file-list-header h3 {
+    margin: 0;
+    font-size: 1.05em;
+}
+
+.file-list-scrollable {
+    flex-grow: 1;
+    overflow-y: auto;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 8px;
+    background-color: #fafafa;
+    max-height:340px;
+}
+
+.data-source-list { 
+    list-style: none; 
+    padding: 0; 
+    margin: 0; 
+}
+.data-source-item { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 10px; 
+    border: 1px solid #e9ecef; 
+    border-radius: 8px; 
+    margin-bottom: 6px; 
+    background-color: #fff; 
+    font-size: 0.9em;
+}
+.data-source-info { font-weight: 500; }
+.data-source-info .file-type { 
+    background-color: #007bff; 
+    color: white; 
+    padding: 2px 6px; 
+    border-radius: 4px; 
+    font-size: 0.75em; 
+    margin-right: 6px; 
+}
+.delete-btn { 
+    background-color: #dc3545; 
+    color: white; 
+    border: none; 
+    padding: 4px 8px; 
+    border-radius: 4px; 
+    cursor: pointer; 
+    font-size: 0.8em;
+}
+.delete-btn:hover { background-color: #c82333; }
+
+
+/* --- Chat History Button --- */
+.chat-history-card {
+    background-color: white;
+    padding: 22px 40px; /* increased padding */
+    border-radius: 12px; /* slightly larger corners */
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.1); /* stronger shadow */
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+.actions-container {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+}
+
+.action-button {
+    padding: 14px 28px; /* larger button size */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 1em; /* slightly larger font */
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.history-button {
+    background-color: #17a2b8;
+}
+.history-button:hover {
+    background-color: #138496;
+}
+
+
+/* --- Modal Styling --- */
+.modal-backdrop { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center; z-index: 2000; opacity: 0; transition: opacity 0.3s ease; }
+.modal-backdrop.show { display: flex; opacity: 1; }
+.modal-content { background-color: white; padding: 30px; border-radius: 8px; text-align: center; max-width: 400px; }
+.modal-content h3 { margin-top: 0; }
+.modal-content p { font-size: 1em; margin: 15px 0 25px 0; }
+.modal-buttons { display: flex; justify-content: space-around; gap: 15px; }
+.modal-buttons button { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; flex-grow: 1; }
+.btn-danger { background-color: #dc3545; color: white; }
+.btn-secondary { background-color: #6c757d; color: white; }
+
+/* Add this to your main CSS file for the shake animation */
+@keyframes shake {
+    10%, 90% { transform: translateX(-1px); }
+    20%, 80% { transform: translateX(2px); }
+    30%, 50%, 70% { transform: translateX(-4px); }
+    40%, 60% { transform: translateX(4px); }
+}
+
+.shake {
+    animation: shake 0.5s ease-in-out;
+}
+
+/* Fix for the file input - instead of display: none, use this approach */
+#fileInput {
+    position: absolute;
+    left: -9999px;
+    opacity: 0;
+    pointer-events: none;
+}

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <!-- 1. Google Identity Services Library -->
+    <script src="https://accounts.google.com/gsi/client" async></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+<body>
+    <div id="global-loading-overlay">
+        <div class="loader"></div>
+    </div>
+    <div class="login-container">
+        <h2>Login</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="message {{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form action="/perform_login" method="POST" id="login-form">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="password-container">
+                    <input type="password" id="password" name="password" required>
+                    <span class="password-toggle" onclick="togglePasswordVisibility()">Show</span>
+                </div>
+            </div>
+            <button type="submit">Log In</button>
+        </form>
+
+        <!-- OR Separator -->
+        <div class="separator">OR</div>
+        
+        <!-- 2. Google Sign-In Button -->
+        <div class="google-btn-container">
+            <div id="g_id_onload"
+                 data-client_id="211913896320-psa0ielp58tu625cttc33774mr6oc988.apps.googleusercontent.com"
+                 data-context="signin"
+                 data-ux_mode="popup"
+                 data-callback="handleCredentialResponse"
+                 data-nonce=""
+                 data-auto_prompt="false">
+            </div>
+    
+            <div class="g_id_signin"
+                 data-type="standard"
+                 data-shape="rectangular"
+                 data-theme="outline"
+                 data-text="signin_with"
+                 data-size="large"
+                 data-logo_alignment="left">
+            </div>
+        </div>
+
+
+        <a href="/signup" class="signup-button">Sign Up</a>
+        <a href="/reset_password_request" class="forgot-password-link">Forgot Password?</a>
+        <a href="/" class="back-button">Back to Home</a>
+    </div>
+
+    <script src="{{url_for('static', filename='js/login.js')}}" > </script>
+</body>
+</html>

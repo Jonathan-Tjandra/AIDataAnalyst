@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Our Application</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+</head>
+<body>
+
+    <div id="global-loading-overlay">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Main content for the landing page -->
+    <div class="main-content">
+        <h1>Welcome!</h1>
+        <p>Please log in or sign up to continue.</p>
+
+        <!-- The Login Button (Moved inside main-content) -->
+        <button id="login-button" onclick="location.href='/login'">
+            Login or Sign Up
+        </button>
+    </div>
+    <script defer src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+</body>
+</html>

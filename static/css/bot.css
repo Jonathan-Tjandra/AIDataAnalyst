@@ -1,0 +1,791 @@
+/* --- Google Font Import --- */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+/* --- General Theme & Variables --- */
+:root {
+    --primary-color: #87CEEB; /* Light Sky Blue */
+    --secondary-color: #F0F8FF; /* Alice Blue */
+    --background-color: #f4f6f8;
+    --text-color: #333;
+    --user-msg-bg: #4A90E2; /* A gentle green for user */
+    --bot-msg-bg: #e5e5ea;
+    --border-color: #ddd;
+    --font-family: 'Poppins', sans-serif;
+}
+
+/* --- Base Styles --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+    font-family: var(--font-family);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    overflow: hidden; /* Prevent body from scrolling */
+}
+
+/* --- Main Layout --- */
+.chatbot-container {
+    display: flex;
+    height: 100vh;
+}
+
+/* --- Sidebar --- */
+.sidebar {
+    width: 260px;
+    background-color: var(--secondary-color);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    height: 100vh; /* Fixed height */
+    overflow: hidden; /* Prevent sidebar from scrolling */
+    flex-shrink: 0;
+}
+
+.sidebar-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+}
+
+/* --- Sidebar Footer & Toggle Button --- */
+.sidebar-footer {
+    margin-top: auto; /* Pushes the button to the bottom */
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+    flex-shrink: 0; /* Prevents footer from shrinking */
+}
+
+#sidebar-toggle {
+    width: 100%;
+    background: none;
+    border: 1px solid transparent; /* for alignment */
+    color: var(--text-color);
+    padding: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-family);
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: left;
+}
+
+#sidebar-toggle:hover {
+    background-color: #e0e0e0;
+}
+
+#sidebar-toggle .icon {
+    font-size: 1.2rem;
+}
+
+/* --- Sidebar Collapsed State --- */
+.sidebar.collapsed {
+    width: 80px; /* The new, smaller width */
+    padding: 1rem 0.5rem;
+}
+
+/* Hide elements that don't fit when collapsed */
+.sidebar.collapsed .new-chat-btn,
+.sidebar.collapsed .chat-history,
+.sidebar.collapsed #sidebar-toggle .text {
+    display: none;
+}
+
+.sidebar.collapsed #sidebar-toggle {
+    justify-content: center; /* Center the icon */
+}
+
+.new-chat-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.new-chat-btn:hover {
+    background-color: #7AC5CD; /* Slightly darker blue */
+}
+
+/* --- Chat Area --- */
+.chat-area {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: white;
+    position: relative; /* For loading overlay */
+    min-width: 0;
+}
+
+/* --- Chat Header --- */
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    background-color: #fff;
+}
+
+.chat-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.model-selector select, .file-selector-container select {
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    font-family: var(--font-family);
+    background-color: #fff;
+}
+
+.header-buttons a, .header-buttons button {
+    margin-left: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.delete-chat-btn {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+}
+
+.delete-chat-btn:hover {
+    background-color: #cc0000;
+}
+
+.exit-btn {
+    background-color: #f0f0f0;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+.exit-btn:hover {
+    background-color: #e0e0e0;
+}
+
+/* --- File Selector Dropdown --- */
+.file-selector-container {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+#csv-file-selector {
+    width: 100%;
+}
+
+/* --- Messages Area --- */
+.chat-messages {
+    flex-grow: 1;
+    overflow-y: auto; /* Independent scrolling */
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    scroll-behavior: smooth;
+}
+
+.message-bubble {
+    padding: 0.75rem 1.25rem;
+    border-radius: 18px;
+    max-width: 70%;
+    line-height: 1.5;
+}
+
+.user-message {
+    background-color: var(--primary-color);
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+}
+
+.bot-message {
+    background-color: var(--bot-msg-bg);
+    color: var(--text-color);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+}
+
+/* --- Chat Input Area --- */
+.chat-input-area {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--border-color);
+    position: relative;
+}
+
+.input-wrapper {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-end;
+}
+
+#user-input {
+    flex-grow: 1;
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    font-family: var(--font-family);
+    font-size: 1rem;
+    resize: none;
+    min-height: 25px;   /* Set a minimum height for one line */
+    max-height: 180px;  /* Set a maximum height (e.g., ~5-6 lines) */
+    height: auto;       /* Remove the fixed height */
+    overflow-y: hidden; /* Hide scrollbar initially */
+}
+
+.button-container {
+    position: relative;
+    min-width: 150px; /* Same as button min-width */
+    height: 50px; /* Fixed height to prevent layout shift */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#send-btn, #stop-btn {
+    padding: 0.75rem 1.5rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s, opacity 0.3s;
+    white-space: nowrap;
+    min-width: 150px;
+    text-align: center;
+    
+    /* KEY FIX: Position buttons absolutely within container */
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    
+    /* Use opacity instead of display for smooth transitions */
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+#send-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #a9a9a9;
+}
+
+#stop-btn {
+    background-color: #6c757d;
+}
+
+/* Hidden state - no layout shift */
+.button-hidden {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+/* --- Elegant Loading Indicator --- */
+.loading-indicator {
+    position: absolute;
+    bottom: 80px; /* Position above the input area */
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+    border-radius: 25px;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.loading-indicator.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.loading-dots {
+    display: flex;
+    gap: 4px;
+}
+
+.loading-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    animation: loading-bounce 1.5s infinite ease-in-out;
+}
+
+.loading-dot:nth-child(1) { animation-delay: -0.32s; }
+.loading-dot:nth-child(2) { animation-delay: -0.16s; }
+.loading-dot:nth-child(3) { animation-delay: 0s; }
+
+@keyframes loading-bounce {
+    0%, 80%, 100% {
+        transform: scale(0.8);
+        opacity: 0.5;
+    }
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.loading-text {
+    font-size: 14px;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+/* --- Custom Scrollbar (for a cleaner look) --- */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}
+
+/* --- START: Confirmation Modal Styles --- */
+.confirmation-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.confirmation-modal {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.confirmation-modal p {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+}
+
+.modal-button-group {
+    display: flex;
+    justify-content: space-between; /* This aligns the buttons to the right */
+    gap: 0.75rem;              /* This adds a nice space between them */
+}
+
+.modal-button-group button {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.modal-cancel-btn {
+    background-color: #f0f0f0;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+.modal-cancel-btn:hover {
+    background-color: #e0e0e0;
+}
+
+.modal-confirm-btn {
+    background-color: #ff4d4d;
+    color: white;
+}
+.modal-confirm-btn:hover {
+    background-color: #cc0000;
+}
+/* --- END: Confirmation Modal Styles --- */
+
+/* --- START: File Message Styles --- */
+.file-container {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.file-container.deleted {
+    background-color: #ffebee;
+    border-color: #ffcdd2;
+    color: #c62828;
+    font-style: italic;
+    cursor: not-allowed;
+    padding: 1rem;
+}
+
+.file-container span {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.file-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.file-buttons button {
+    padding: 0.3rem 0.7rem;
+    font-size: 0.8rem;
+    border-radius: 5px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+}
+
+.file-delete-btn {
+    background-color: #ffebf0;
+    border-color: #ffcdd2;
+    color: #c62828;
+}
+/* --- END: File Message Styles --- */
+
+/* --- START: Chat History Styles --- */
+.chat-history {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1; /* Takes up remaining space */
+    overflow-y: auto; /* Scrollable within its container */
+    min-height: 0; /* Allows flex item to shrink below content size */
+    padding-right: 0.25rem; /* Space for scrollbar */
+}
+
+.chat-history-item {
+    padding: 0.75rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 0; /* Prevents items from shrinking */
+    min-height: fit-content; /* Maintains original height */
+}
+
+.chat-history-item:hover {
+    background-color: #e0e0e0;
+}
+
+.chat-history-item.active {
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 500;
+}
+/* --- END: Chat History Styles --- */
+
+/* File Intro Message Styles */
+.file-intro-message {
+    font-weight: 500;
+    color: #495057;
+    margin-bottom: 12px;
+    font-size: 15px;
+    line-height: 1.4;
+    background: #e3f2fd;
+    padding: 12px;
+    border-radius: 8px;
+    border-left: 4px solid #2196f3;
+}
+
+/* Message Bubble Deleted State */
+.message-bubble.deleted {
+    opacity: 0.7;
+    background: #f8f9fa;
+}
+
+/* File Container Styles */
+.file-container {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 8px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.file-container:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.file-container.deleted {
+    background: #f8f9fa;
+    border-color: #dc3545;
+    opacity: 0.7;
+}
+
+/* File Name Styles */
+.file-name {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+
+/* File Preview Styles */
+.file-preview {
+    margin: 12px 0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid #dee2e6;
+}
+
+.file-preview-image {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    max-height: 300px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+}
+
+.file-preview-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    color: #6c757d;
+    background: #f8f9fa;
+    text-align: center;
+}
+
+.file-icon {
+    font-size: 48px;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.file-preview-text,
+.file-preview-generic {
+    min-height: 80px;
+}
+
+/* File Buttons Container */
+.file-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+}
+
+/* Enhanced Download Button */
+.file-download-btn {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(40, 167, 69, 0.2);
+}
+
+.file-download-btn:hover {
+    background: linear-gradient(135deg, #218838, #1ea085);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+    text-decoration: none;
+    color: white;
+}
+
+.file-download-btn:active {
+    transform: translateY(0);
+}
+
+/* Enhanced Delete Button */
+.file-delete-btn {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(220, 53, 69, 0.2);
+}
+
+.file-delete-btn:hover {
+    background: linear-gradient(135deg, #c82333, #bd2130);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+.file-delete-btn:active {
+    transform: translateY(0);
+}
+
+/* Deleted File Notice */
+.deleted-file-notice {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #dc3545;
+    font-weight: 500;
+    padding: 16px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #dc3545;
+}
+
+.deleted-icon {
+    font-size: 20px;
+    opacity: 0.8;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .file-buttons {
+        flex-direction: column;
+    }
+    
+    .file-download-btn,
+    .file-delete-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .file-preview-image {
+        max-width: 100%;
+        max-height: 200px;
+    }
+    
+    .file-container {
+        padding: 12px;
+    }
+}
+
+/* The semi-transparent background overlay */
+#global-loading-overlay {
+    /* Hidden by default */
+    display: none; 
+    
+    /* Position it over everything */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.7); /* Light background with transparency */
+    z-index: 9999; /* High z-index to be on top */
+
+    /* Use flexbox to center the spinner */
+    justify-content: center;
+    align-items: center;
+}
+
+/* The spinning loader animation */
+.loader {
+    border: 6px solid #f3f3f3; /* Light grey */
+    border-top: 6px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
+/* The spin animation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* --- START: Elegant Toast Notification Styles --- */
+.toast-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 8px;
+    color: white;
+    font-size: 15px;
+    font-weight: 500;
+    z-index: 1050; /* Above other content */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    animation: toast-slide-in 0.5s ease-out forwards;
+}
+
+/* Different styles for different message types */
+.toast-notification.error {
+    background-color: #e53e3e; /* Red */
+}
+
+.toast-notification.success {
+    background-color: #38a169; /* Green */
+}
+
+/* The animation for sliding in */
+@keyframes toast-slide-in {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+/* --- END: Elegant Toast Notification Styles --- */
