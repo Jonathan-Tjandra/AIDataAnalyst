@@ -92,12 +92,6 @@ def return_db_connection(conn):
     else:
         conn.close()
 
-# --- Database Initialization ---
-# This command creates all the tables defined above if they don't exist.
-with app.app_context():
-    db.create_all()
-    print("SQLAlchemy database initialized successfully.")
-
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -155,6 +149,11 @@ class GeneratedFile(db.Model):
     created_at = db.Column(db.DateTime, server_default=sqlalchemy_func.now())
     intro_message = db.Column(db.Text, nullable=True)
 
+# --- Database Initialization ---
+# This command creates all the tables defined above if they don't exist.
+with app.app_context():
+    db.create_all()
+    print("SQLAlchemy database initialized successfully.")
 
 ############## END SETUP DB, CLOUDFARE ##################################################################################
 
