@@ -296,11 +296,7 @@ document.addEventListener('DOMContentLoaded', () => {
             chatMessages.innerHTML = '';
 
             // Add the new session to the top of the sidebar UI
-            const historyItem = document.createElement('div');
-            historyItem.className = 'chat-history-item active';
-            historyItem.textContent = newSession.title;
-            historyItem.dataset.sessionId = newSession.id;
-            historyItem.onclick = () => loadChat(parseInt(newSession.id));
+            const historyItem = createSessionElement(newSession);
 
             document.querySelectorAll('.chat-history-item').forEach(item => {
                 item.classList.remove('active');
@@ -362,7 +358,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Initial load from localStorage
 
-    const initialLoad = async () => {
+   const initialLoad = async () => {
         showLoadingIndicator();
         try {
             const response = await fetch('/api/initial-data');
@@ -375,14 +371,12 @@ document.addEventListener('DOMContentLoaded', () => {
             populateCsvDropdown(data.data_sources);
             
             // Clear and populate chat history sidebar
+            const chatHistoryContainer = document.querySelector('.chat-history');
             chatHistoryContainer.innerHTML = '';
             if (data.sessions && data.sessions.length > 0) {
                 data.sessions.forEach(session => {
-                    const historyItem = document.createElement('div');
-                    historyItem.className = 'chat-history-item';
-                    historyItem.textContent = session.title;
-                    historyItem.dataset.sessionId = session.id;
-                    historyItem.onclick = () => loadChat(session.id);
+                    // Use the new helper function to create each element
+                    const historyItem = createSessionElement(session);
                     chatHistoryContainer.appendChild(historyItem);
                 });
             }
@@ -396,10 +390,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } catch (error) {
             console.error("Error on initial load:", error);
+            const chatMessages = document.querySelector('.chat-messages');
             chatMessages.innerHTML = `<div class="error-message">Could not connect to the server to load chat history. Please refresh the page.</div>`;
         }
         finally {
-             hideLoadingIndicator();
+            hideLoadingIndicator();
         }
     };
 
@@ -652,6 +647,104 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             toast.remove();
         }, 3000);
+    }
+
+    // Add this new function to bot.js
+    function enableEditMode(sessionItem, titleSpan) {
+        // Get original title and session ID
+        const originalTitle = titleSpan.textContent;
+        const sessionId = sessionItem.dataset.sessionId;
+
+        // Hide the original title span
+        titleSpan.style.display = 'none';
+        
+        // Create the editor input
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'title-editor';
+        input.value = originalTitle;
+        
+        // Create the action buttons container
+        const editActions = document.createElement('div');
+        editActions.className = 'edit-actions';
+
+        const saveBtn = document.createElement('button');
+        saveBtn.textContent = 'Save';
+        saveBtn.className = 'save-title-btn';
+
+        const cancelBtn = document.createElement('button');
+        cancelBtn.textContent = 'Cancel';
+
+        editActions.append(cancelBtn, saveBtn);
+
+        // Combine into a form to handle submission
+        const editForm = document.createElement('form');
+        editForm.append(input, editActions);
+        sessionItem.prepend(editForm); // Add to the start of the item
+        input.focus(); // Focus the input
+        input.select(); // Select the text
+
+        // --- Event Handlers ---
+        const exitEditMode = () => {
+            editForm.remove();
+            titleSpan.style.display = 'block';
+        };
+
+        cancelBtn.onclick = exitEditMode;
+
+        editForm.onsubmit = (e) => {
+            e.preventDefault(); // Prevent default form submission
+            const newTitle = input.value.trim();
+
+            if (newTitle && newTitle !== originalTitle) {
+                // Optimistically update the UI
+                titleSpan.textContent = newTitle;
+                
+                // Call the backend to save the change
+                fetch(`/api/sessions/${sessionId}/rename`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ new_title: newTitle })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        // If backend fails, revert the title in the UI
+                        titleSpan.textContent = originalTitle;
+                        alert('Error: Could not rename session.');
+                    }
+                });
+            }
+            exitEditMode();
+        };
+    }
+
+    function createSessionElement(session) {
+        const historyItem = document.createElement('div');
+        historyItem.className = 'chat-history-item';
+        historyItem.dataset.sessionId = session.id;
+
+        // Create the title part
+        const titleSpan = document.createElement('span');
+        titleSpan.className = 'session-title';
+        titleSpan.textContent = session.title;
+        titleSpan.onclick = () => loadChat(session.id);
+
+        // Create the actions part (3-dot button)
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'session-actions';
+
+        const editButton = document.createElement('button');
+        editButton.innerHTML = '&#8942;'; // Vertical ellipsis
+        editButton.title = 'Rename session';
+        editButton.onclick = (e) => {
+            e.stopPropagation(); // Prevent the chat from loading
+            enableEditMode(historyItem, titleSpan);
+        };
+
+        actionsDiv.appendChild(editButton);
+        historyItem.append(titleSpan, actionsDiv);
+        
+        return historyItem;
     }
 
 

@@ -749,6 +749,27 @@ def update_session_title(session_id):
     
     return jsonify({"title": chat_session.session_title})
 
+@app.route('/api/sessions/<int:session_id>/rename', methods=['PUT'])
+@login_required
+def rename_session(session_id):
+    """
+    Updates the title of a specific chat session.
+    """
+    user_id = session.get('user_id')
+    data = request.json
+    new_title = data.get('new_title')
+
+    if not new_title:
+        return jsonify({"error": "New title is required"}), 400
+
+    chat_session = ChatSession.query.filter_by(id=session_id, user_id=user_id).first_or_404()
+
+    chat_session.session_title = new_title
+    chat_session.title_updated = True # Mark that the title has been manually updated
+    db.session.commit()
+
+    return jsonify({"message": "Session title updated successfully", "new_title": new_title})
+
 ################################### END BOT UI HANDLING ###############################################################
 
 ################################### DELETE ACCOUNT ####################################################################
