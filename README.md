@@ -33,8 +33,8 @@ Follow these steps to get the application running locally.
 
 1.  **Clone the Repository**
     ```bash
-    git clone <your-repository-url>
-    cd <your-repository-name>
+    git clone https://github.com/Jonathan-Tjandra/AIDataAnalyst.git
+    cd AIDataAnalyst
     ```
 
 2.  **Create and Activate a Virtual Environment**
@@ -113,7 +113,7 @@ Follow these steps to get the application running locally.
     -   Open a **new, separate terminal window**.
     -   Run the following command. Make sure the port number matches the port your Flask application is running on.
         ```bash
-        ngrok http 5000
+        ngrok http 5001
         ```
     -   ngrok will provide you with a public URL (e.g., `https://<random-id>.ngrok-free.app`). You can use this URL in your browser to access your local application.
 
